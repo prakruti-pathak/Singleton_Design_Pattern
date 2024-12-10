@@ -18,8 +18,8 @@ namespace SingletonDemo
     public sealed class Singleton
     {
         private static int counter =0;
-        //eager loading just make readonly and new Singleton
-        private readonly static Singleton instance=new Singleton();
+        //lazy loading  use Lazy Keyword and lambda 
+        private readonly static Lazy<Singleton> instance=new Lazy<Singleton>(()=>new Singleton());
        //private constructor ensure that object is not instantiated other than with in the class itself
         private Singleton() 
         {
@@ -30,11 +30,11 @@ namespace SingletonDemo
         //on the private property
         public static Singleton GetInstance
         {
-            //eager loading and it is thread safety
+            //lazy loading and it is thread safety
             //to avoid parallel execution and creation of multiple instance
             get
             {
-                return instance;
+                return instance.Value;
             }
         }
         //public method which can be invoked through the singleton instance
