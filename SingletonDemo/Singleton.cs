@@ -18,6 +18,7 @@ namespace SingletonDemo
     public sealed class Singleton
     {
         private static int counter =0;
+        private static readonly object obj = new object();
         private static Singleton instance=null;
        //private constructor ensure that object is not instantiated other than with in the class itself
         private Singleton() 
@@ -29,10 +30,20 @@ namespace SingletonDemo
         //on the private property
         public static Singleton GetInstance
         {
+            //double check locking
+            //to avoid parallel execution and creation of multiple instance
             get
             {
                 if (instance == null)
-                    instance = new Singleton();
+                {
+                    lock (obj)
+                    {
+                        if (instance == null)
+                        {
+                            instance = new Singleton();
+                        }
+                    }
+                }
                 return instance;
             }
         }
